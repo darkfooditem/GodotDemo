@@ -3,7 +3,7 @@ extends Control
 var timer = 1
 var UDP_listener = PacketPeerUDP.new()
 var UDP_broadcaster = PacketPeerUDP.new()
-var server_meta_agent
+var server_meta_agent = NetworkedMultiplayerENet.new()
 var hosting = false
 
 func start_hosting():
@@ -36,7 +36,7 @@ func _process(delta):
 	
 	timer -= delta
 	if timer <= 0 :
-		timer = 30
+		timer = 15
 		check_servers()
 
 func check_servers():
