@@ -5,6 +5,7 @@ var UDP_listener = PacketPeerUDP.new()
 var UDP_broadcaster = PacketPeerUDP.new()
 var server_meta_agent = NetworkedMultiplayerENet.new()
 var hosting = false
+var host_IPs = []
 
 func start_hosting():
 	if !hosting:
@@ -14,12 +15,17 @@ func start_hosting():
 			print("Error")
 		else:
 			print("OK")
-		if server_meta_agent.create_server(3001, 60) != OK:
+		if server_meta_agent.create_server(3002, 60) != OK:
 			print("Error")
 		else:
 			print("OK")
 
 func _ready():
+	if UDP_broadcaster.listen(3001) != OK:
+		print("Error")
+	else:
+		print("OK")
+	get_tree().connect("network_peer_connected", self, "boop")
 	$StartHosting.connect("pressed", self, "start_hosting")
 	
 func _process(delta):
@@ -30,14 +36,33 @@ func _process(delta):
 		var client_IP = UDP_listener.get_packet_ip()
 		var pac = "check".to_ascii()
 		if array_bytes == pac:
-			UDP_listener.set_dest_address(client_IP, 3000)
-			UDP_listener.put_packet("Hey! Listen!".to_ascii())
+			UDP_listener.set_dest_address(client_IP, 3001)
+			UDP_listener.put_packet("Hey!".to_ascii())
 			print("got one")
-	
+	if UDP_broadcaster.get_available_packet_count() > 0:
+		print("got another one")
+		var array_bytes = UDP_listener.get_packet()
+		var host_IP = UDP_listener.get_packet_ip()
+		var pac = "Hey!".to_ascii()
+		#if array_bytes == pac:
+		if true:
+			if ! host_IPs.has(host_IP): 
+				host_IPs.append(host_IP)
+				var lobby_client = NetworkedMultiplayerENet.new()
+				if lobby_client.create_client(host_IP,3002) == OK:
+					$ServerList.append_agent(lobby_client)
+				else:
+					print(":(")
+			
 	timer -= delta
 	if timer <= 0 :
-		timer = 15
+		timer = 5
 		check_servers()
+
+remote func boop(id):
+	print("boop")
+	print(id)
+
 
 func check_servers():
 	UDP_broadcaster.set_dest_address( "255.255.255.255" , 3000)
