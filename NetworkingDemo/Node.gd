@@ -7,6 +7,7 @@ var server_meta_agent = NetworkedMultiplayerENet.new()
 var hosting = false
 var host_IPs = []
 
+
 func start_hosting():
 	if !hosting:
 		hosting = true
@@ -19,14 +20,18 @@ func start_hosting():
 			print("Error")
 		else:
 			print("OK")
+		Global.player = 1
+		Global.enemy = 2
 
 func _ready():
+	
 	if UDP_broadcaster.listen(3001) != OK:
 		print("Error")
 	else:
 		print("OK")
 	get_tree().connect("network_peer_connected", self, "boop")
 	$StartHosting.connect("pressed", self, "start_hosting")
+	$ServerList.append_agent("spam")
 	
 func _process(delta):
 	
@@ -41,12 +46,13 @@ func _process(delta):
 			print("got one")
 	if UDP_broadcaster.get_available_packet_count() > 0:
 		print("got another one")
-		var array_bytes = UDP_listener.get_packet()
-		var host_IP = UDP_listener.get_packet_ip()
+		var array_bytes = UDP_broadcaster.get_packet()
+		var host_IP = UDP_broadcaster.get_packet_ip()
 		var pac = "Hey!".to_ascii()
-		#if array_bytes == pac:
-		if true:
+		if array_bytes == pac:
+		#if true:
 			if ! host_IPs.has(host_IP): 
+				print("bluh")
 				host_IPs.append(host_IP)
 				var lobby_client = NetworkedMultiplayerENet.new()
 				if lobby_client.create_client(host_IP,3002) == OK:
@@ -68,3 +74,4 @@ func check_servers():
 	UDP_broadcaster.set_dest_address( "255.255.255.255" , 3000)
 	UDP_broadcaster.put_packet("check".to_ascii())
 	print("Broadcast sent")
+	

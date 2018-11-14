@@ -19,6 +19,10 @@ config/name="NetworkingDemo"
 run/main_scene="res://Node.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://Global.gd"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
