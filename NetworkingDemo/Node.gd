@@ -20,6 +20,7 @@ func start_hosting():
 			print("Error")
 		else:
 			print("OK")
+			get_tree().set_network_agent(server_meta_agent)
 		Global.player = 1
 		Global.enemy = 2
 
@@ -35,9 +36,14 @@ func _ready():
 	$ServerList.append_agent("spam")
 	
 func connect_client():
+	print($IPEdit.text)
 	var agent = NetworkedMultiplayerENet.new()
-	agent.create_client($IPEdit.text,3002)
-	rpc("boop")
+	if agent.create_client($IPEdit.text,3002) == OK:
+		print("OK")
+		get_tree().set_network_peer(agent)
+	else:
+		print(":(")
+	rpc_id(1, "boop")
 	
 """
 func _process(delta):
