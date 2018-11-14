@@ -31,8 +31,15 @@ func _ready():
 		print("OK")
 	get_tree().connect("network_peer_connected", self, "boop")
 	$StartHosting.connect("pressed", self, "start_hosting")
+	$ConnectClient.connect("pressed",self,"connect_client")
 	$ServerList.append_agent("spam")
 	
+func connect_client():
+	var agent = NetworkedMultiplayerENet.new()
+	agent.create_client($IPEdit.text,3002)
+	rpc("boop")
+	
+"""
 func _process(delta):
 	
 	if UDP_listener.get_available_packet_count() > 0:
@@ -64,6 +71,7 @@ func _process(delta):
 	if timer <= 0 :
 		timer = 5
 		check_servers()
+"""
 
 remote func boop(id):
 	print("boop")
@@ -71,7 +79,7 @@ remote func boop(id):
 
 
 func check_servers():
-	UDP_broadcaster.set_dest_address( "255.255.255.255" , 3000)
+	UDP_broadcaster.set_dest_address( "141.57.9.139" , 3000)
 	UDP_broadcaster.put_packet("check".to_ascii())
 	print("Broadcast sent")
 	
