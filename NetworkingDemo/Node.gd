@@ -20,7 +20,7 @@ func start_hosting():
 			print("Error")
 		else:
 			print("OK")
-			get_tree().set_network_agent(server_meta_agent)
+			get_tree().set_network_peer(server_meta_agent)
 		Global.player = 1
 		Global.enemy = 2
 
@@ -34,6 +34,7 @@ func _ready():
 	$StartHosting.connect("pressed", self, "start_hosting")
 	$ConnectClient.connect("pressed",self,"connect_client")
 	$ServerList.append_agent("spam")
+	$Booper.connect("pressed",self,"bop",["Fus-Ro-Da"])
 	
 func connect_client():
 	print($IPEdit.text)
@@ -83,6 +84,8 @@ remote func boop(id):
 	print("boop")
 	print(id)
 
+func bop(id):
+	rpc("boop",id)
 
 func check_servers():
 	UDP_broadcaster.set_dest_address( "141.57.9.139" , 3000)
