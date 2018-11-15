@@ -5,7 +5,18 @@ var direction
 enum {NONE, LEFT, UP, RIGHT, DOWN}
 
 func _ready():
+	#initialize_player("1");
+	
 	pass # Replace with function body.
+
+remote func initialize_player(name, final = Global.not_testing):
+	var player = load("res://Player.tscn").instance()
+	player.name = name
+	$World.add_child(player)
+	if player.name == str(Global.player) :
+		player.get_node("Player").active_player = true
+	if !final:
+		rpc_id(Global.enemy, "initialize_player", name, true)
 
 
 func _process(delta):

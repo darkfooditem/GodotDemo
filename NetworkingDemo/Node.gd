@@ -22,15 +22,16 @@ func start_hosting():
 			print("OK")
 			get_tree().set_network_peer(server_meta_agent)
 		Global.player = 1
-		Global.enemy = 2
+		#Global.enemy = 2
+		get_tree().connect("network_peer_connected", self, "player_connected")
 
 func _ready():
-	
+	#Global.start_game()
 	if UDP_broadcaster.listen(3001) != OK:
 		print("Error")
 	else:
 		print("OK")
-	get_tree().connect("network_peer_connected", self, "boop")
+	
 	$StartHosting.connect("pressed", self, "start_hosting")
 	$ConnectClient.connect("pressed",self,"connect_client")
 	$ServerList.append_agent("spam")
@@ -42,9 +43,17 @@ func connect_client():
 	if agent.create_client($IPEdit.text,3002) == OK:
 		print("OK")
 		get_tree().set_network_peer(agent)
+		Global.enemy = 1
+		Global.player = get_tree().get_network_unique_id()
 	else:
 		print(":(")
 	rpc_id(1, "boop")
+
+func player_connected(id):
+	Global.enemy = id
+	
+	Global.start_game()
+
 	
 """
 func _process(delta):
