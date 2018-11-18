@@ -54,9 +54,14 @@ func connect_client():
 func player_connected(id):
 	Global.enemy = id
 	
-	Global.start_game()
+	start_game()
 
-	
+func start_game(final = Global.not_testing):
+	if !final:
+		print("contacting enemy")
+		rpc_id(Global.enemy,"start_game", true)
+	else:
+		 print("made contact")
 """
 func _process(delta):
 	

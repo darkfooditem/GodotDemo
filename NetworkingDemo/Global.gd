@@ -11,9 +11,7 @@ func _ready():
 	pass # Replace with function body.
 
 func start_game(final = not_testing):
-	if !final:
-		print("contacting enemy")
-		rpc_id(enemy,"start_game", true)
+	
 	var root = get_tree().get_root()
 	root.get_child(root.get_child_count()-1).queue_free()
 	var game = load("res://Main.tscn").instance()
