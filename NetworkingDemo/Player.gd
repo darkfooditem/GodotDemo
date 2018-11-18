@@ -23,6 +23,7 @@ func _process(delta):
 	if active_player:
 		if moveable:
 			var change = Vector2( (-1 if Global.direction==Global.LEFT else (1 if Global.direction==Global.RIGHT else 0) ),0)
+			#var change = Vector2(1,0)
 			change *= (speed if grounded else air_speed) * delta
 			change += Vector2(0, fall_speed ) * delta * (0 if grounded else -1)
 			translate( change )

@@ -26,7 +26,7 @@ func start_hosting():
 		get_tree().connect("network_peer_connected", self, "player_connected")
 
 func _ready():
-	#Global.start_game()
+	Global.start_game()
 	if UDP_broadcaster.listen(3001) != OK:
 		print("Error")
 	else:
