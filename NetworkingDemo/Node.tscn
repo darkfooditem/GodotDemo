@@ -111,7 +111,6 @@ caret_position = 0
 _sections_unfolded = [ "Caret", "Rect", "custom_fonts", "custom_icons" ]
 
 [node name="Booper" type="Button" parent="."]
-visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0

@@ -4,6 +4,7 @@ var timer = 1
 var UDP_listener = PacketPeerUDP.new()
 var UDP_broadcaster = PacketPeerUDP.new()
 var server_meta_agent = NetworkedMultiplayerENet.new()
+var client_agent
 var hosting = false
 var host_IPs = []
 
@@ -26,7 +27,7 @@ func start_hosting():
 		get_tree().connect("network_peer_connected", self, "player_connected")
 
 func _ready():
-	Global.start_game()
+	#Global.start_game()
 	if UDP_broadcaster.listen(3001) != OK:
 		print("Error")
 	else:
@@ -45,6 +46,7 @@ func connect_client():
 		get_tree().set_network_peer(agent)
 		Global.enemy = 1
 		Global.player = get_tree().get_network_unique_id()
+		client_agent=agent
 	else:
 		print(":(")
 	rpc_id(1, "boop")
